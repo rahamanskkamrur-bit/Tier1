@@ -702,4 +702,29 @@ def register_commands(b: Tier1SecurityBot):
             description=f"👤 **Member:** {member} (ID: `{member.id}`)\n🛡️ **Moderator:** {interaction.user.mention}\n📌 **Reason:** {reason}",
             color=discord.Color.red(),
         )
-        await interaction.response.send_message(embed=emb
+        await interaction.response.send_message(embed=emb)
+        await send_mod_log(interaction.guild, emb)
+
+
+async def main():
+    await run_web_server()
+    asyncio.create_task(self_ping_loop())
+    if not BOT_TOKEN:
+        print("❌ ERROR: Set BOT_TOKEN in Environment Variables!")
+        while True:
+            await asyncio.sleep(3600)
+
+    bot = Tier1SecurityBot(True)
+    register_commands(bot)
+    try:
+        await bot.start(BOT_TOKEN)
+    except discord.PrivilegedIntentsRequired:
+        await bot.close()
+        bot = Tier1SecurityBot(False)
+        register_commands(bot)
+        await bot.start(BOT_TOKEN)
+
+
+if __name__ == "__main__":
+    asyncio.run(main())
+    
